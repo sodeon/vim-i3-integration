@@ -16,6 +16,6 @@ func! Focus(comando)
     let neww = winnr()
     if oldw == neww
         " Use python to invoke the i3-msg command so that vim doesn't need to be redrawn.
-        call tmux-i3-integration#PythonExecProcess("i3-msg", ["-q", "focus", a:comando])
+        call tmux_i3_integration#PythonExecProcess("i3-msg", ["-q", "focus", a:comando])
     endif
 endfunction
