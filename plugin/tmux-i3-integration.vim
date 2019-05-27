@@ -40,10 +40,10 @@ function Move(direction)
         return
     endif
 
-    let oldw = winnr()
+    let old_layout = string(winlayout())
     silent exe 'wincmd ' . vim_cmd
-    let neww = winnr()
-    if oldw == neww
+    let new_layout = string(winlayout())
+    if old_layout == new_layout
         call system("vim-tmux-i3-integration move ".a:direction)
     endif
 endfunction
@@ -71,10 +71,10 @@ function Resize(orientation, delta)
     elseif a:orientation == 'vertical'
         if !split.has_horizontal
             if a:delta > 0
-                call system("vim-tmux-i3-integration -q resize grow height")
+                call system("vim-tmux-i3-integration resize grow height")
                 return
             else
-                call system("vim-tmux-i3-integration -q resize shrink height")
+                call system("vim-tmux-i3-integration resize shrink height")
                 return
             endif
         endif
