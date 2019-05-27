@@ -54,7 +54,7 @@ endfunction
 function Resize(orientation, delta)
     " Find layout situation: if there are corresponding split for resize orientation
     let split = {'has_horizontal': 0, 'has_vertical': 0}
-    call s:get_buf_split(winlayout(), split, bufwinid("%"))
+    call s:get_buf_split(winlayout(), split, win_getid())
 
     " If orientation is horizontal and there is no split on the left/right, delegate resize operation.
     " If orientation is vertical   and there is no split above/below      , delegate resize operation.
@@ -100,6 +100,7 @@ function Resize(orientation, delta)
 endfunction
 
 " Find if current window has adjacent vertical or horizontal split
+" @param split, split content will be modified and is part of return value for split information
 function s:get_buf_split(layout, split, winid)
     let node = string(a:layout[0]) " Workaround to [1, 2] == 'gg' comparison (vim does not allow list compared to string), find no way to detect if an variable is array. So convert to string.
     if node == "'leaf'"
