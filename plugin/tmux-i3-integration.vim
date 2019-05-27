@@ -4,7 +4,7 @@ if exists('g:loaded_tmux_i3_integration') || &cp
 endif
 let g:loaded_tmux_i3_integration = 1
 
-
+" Window navigation
 function Focus(direction) 
     if a:direction == 'left'
         let vim_cmd = 'h'
@@ -23,10 +23,11 @@ function Focus(direction)
     let neww = winnr()
     if oldw == neww
         " Use python to invoke the i3-msg command so that vim doesn't need to be redrawn.
-        call tmux_i3_integration#PythonExecProcess("i3-msg", ["-q", "focus", a:direction])
+        call system("i3-msg -q focus ".a:direction)
     endif
 endfunction
 
+" Window movement
 function Move(direction)
     if a:direction == 'left'
         let vim_cmd = 'H'
@@ -45,10 +46,11 @@ function Move(direction)
     let neww = winnr()
     if oldw == neww
         " Use python to invoke the i3-msg command so that vim doesn't need to be redrawn.
-        call tmux_i3_integration#PythonExecProcess("i3-msg", ["-q", "move", a:direction])
+        call system("i3-msg -q move ".a:direction)
     endif
 endfunction
 
+" Window resize
 " @param orientation horizontal|vertical
 " @param delta signed integer, "size in column"
 function Resize(orientation, delta)
@@ -61,24 +63,24 @@ function Resize(orientation, delta)
     if a:orientation == 'horizontal'
         if !split.has_vertical
             if a:delta > 0
-                call tmux_i3_integration#PythonExecProcess("i3-msg", ["-q", "resize", "grow   width 10px or 7ppt"])
+                call system("i3-msg -q resize grow  width 10px or 7ppt")
                 return
             else
-                call tmux_i3_integration#PythonExecProcess("i3-msg", ["-q", "resize", "shrink width 10px or 7ppt"])
+                call system("i3-msg -q resize shrink width 10px or 7ppt")
                 return
             endif
         endif
     elseif a:orientation == 'vertical'
         if !split.has_horizontal
             if a:delta > 0
-                call tmux_i3_integration#PythonExecProcess("i3-msg", ["-q", "resize", "grow   height 10px or 7ppt"])
+                call system("i3-msg -q resize grow  height 10px or 7ppt")
                 return
             else
-                call tmux_i3_integration#PythonExecProcess("i3-msg", ["-q", "resize", "shrink height 10px or 7ppt"])
+                call system("i3-msg -q resize shrink height 10px or 7ppt")
                 return
             endif
         endif
-    else
+    else " If configured properly, should never enter this branch.
         return
     endif
 
@@ -99,7 +101,11 @@ function Resize(orientation, delta)
     silent exe abs(a:delta).'wincmd '.vim_cmd
 endfunction
 
-" Find if current window has adjacent vertical or horizontal split
+
+"------------------------------------------------------------------------------
+" Helper functions
+"------------------------------------------------------------------------------
+" Find if current window has adjacent vertical or horizontal split. This function is recursive.
 " @param split, split content will be modified and is part of return value for split information
 function s:get_buf_split(layout, split, winid)
     let node = string(a:layout[0]) " Workaround to [1, 2] == 'gg' comparison (vim does not allow list compared to string), find no way to detect if an variable is array. So convert to string.
