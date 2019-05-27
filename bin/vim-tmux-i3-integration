@@ -1,0 +1,22 @@
+#!/bin/bash -ue
+
+tmp=/tmp/vim-tmux-i3-integration
+
+focus() {
+    i3-msg -q focus $@
+}
+
+move() {
+    i3-msg -q move $@
+}
+
+resize() {
+    if [[ -f $tmp ]]; then
+        read size_delta < $tmp
+    else # default value. If proper configured, should never reach this path.
+        size_delta='10px or 12ppt'
+    fi
+    i3-msg -q "resize $@ $size_delta"
+}
+
+[[ $# == 0 ]] || $@

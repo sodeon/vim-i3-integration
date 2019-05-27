@@ -22,8 +22,7 @@ function Focus(direction)
     silent exe 'wincmd ' . vim_cmd
     let neww = winnr()
     if oldw == neww
-        " Use python to invoke the i3-msg command so that vim doesn't need to be redrawn.
-        call system("i3-msg -q focus ".a:direction)
+        call system("vim-tmux-i3-integration focus ".a:direction)
     endif
 endfunction
 
@@ -45,8 +44,7 @@ function Move(direction)
     silent exe 'wincmd ' . vim_cmd
     let neww = winnr()
     if oldw == neww
-        " Use python to invoke the i3-msg command so that vim doesn't need to be redrawn.
-        call system("i3-msg -q move ".a:direction)
+        call system("vim-tmux-i3-integration move ".a:direction)
     endif
 endfunction
 
@@ -63,20 +61,20 @@ function Resize(orientation, delta)
     if a:orientation == 'horizontal'
         if !split.has_vertical
             if a:delta > 0
-                call system("i3-msg -q resize grow  width 10px or 7ppt")
+                call system("vim-tmux-i3-integration resize grow width")
                 return
             else
-                call system("i3-msg -q resize shrink width 10px or 7ppt")
+                call system("vim-tmux-i3-integration resize shrink width")
                 return
             endif
         endif
     elseif a:orientation == 'vertical'
         if !split.has_horizontal
             if a:delta > 0
-                call system("i3-msg -q resize grow  height 10px or 7ppt")
+                call system("vim-tmux-i3-integration -q resize grow height")
                 return
             else
-                call system("i3-msg -q resize shrink height 10px or 7ppt")
+                call system("vim-tmux-i3-integration -q resize shrink height")
                 return
             endif
         endif
