@@ -1,5 +1,6 @@
 #!/bin/bash -ue
 
+# Resize parameter
 tmp=/tmp/vim-tmux-i3-integration
 
 focus() {
@@ -11,6 +12,10 @@ move() {
 }
 
 resize() {
+    # Size parameter is not passed from VIM. Use tmp file to pass such parameter.
+    # This is to avoid ~/.vimrc having to have i3 size parameter. That is ugly.
+    # The tmp file design is not a queue, but store single parameter only. 
+    # This may create unwanted side effect when system is extremely busy and having multiple unprocessed commands, but this approach is the most stable.
     if [[ -f $tmp ]]; then
         read size_delta < $tmp
     else # default value. If proper configured, should never reach this path.
@@ -19,4 +24,7 @@ resize() {
     i3-msg -q "resize $@ $size_delta"
 }
 
-[[ $# == 0 ]] || $@
+# Ignore commands from VIM if i3 is not the window manager.
+if [[ $XDG_CURRENT_DESKTOP == 'i3' ]]; then
+    [[ $# == 0 ]] || $@
+fi
