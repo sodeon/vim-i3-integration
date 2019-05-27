@@ -7,5 +7,7 @@ Does not use key release event to trigger.
 
 ## Related Work
 https://github.com/jwilm/i3-vim-focus
+
 https://github.com/termhn/i3-vim-nav
+
 https://github.com/christoomey/vim-tmux-navigator
