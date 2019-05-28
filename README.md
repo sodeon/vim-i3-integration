@@ -1,5 +1,6 @@
 # Work In Progress...
 
+
 ## Features
 Can be freely combined with "vim only", "vim + tmux", "vim + i3" and "vim + tmux + i3".
 
