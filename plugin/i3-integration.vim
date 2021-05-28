@@ -23,6 +23,8 @@ function Focus(direction)
     let neww = winnr()
     if oldw == neww
         call system("vim-tmux-i3-integration focus ".a:direction)
+    elseif exists('$TMUX')
+        call system("printf '\033]2;" . @% ."\033\\' > $TTY")
     endif
 endfunction
 
@@ -97,6 +99,60 @@ function Resize(orientation, delta)
         endif
     endif
     silent exe abs(a:delta).'wincmd '.vim_cmd
+endfunction
+
+" Tab navigation
+function TabFocus(direction) 
+    if a:direction == 'left'
+        let vim_cmd = 'h'
+    elseif a:direction == 'right'
+        let vim_cmd = 'l'
+    else
+        return
+    endif
+
+    let oldw = tabpagenr()
+    silent exe 'TWcmd tcm ' . vim_cmd
+    let neww = tabpagenr()
+
+    if !exists('$TMUX')
+        return
+    endif
+    if oldw == neww
+        if a:direction == 'left'
+            call system("tmux previous-window")
+        else
+            call system("tmux next-window")
+        endif
+    else
+        call system("printf '\033]2;" . @% ."\033\\' > $TTY")
+    endif
+endfunction
+
+" Tab movement
+function TabMove(direction) 
+    if a:direction == 'left'
+        let vim_cmd = 'h'
+    elseif a:direction == 'right'
+        let vim_cmd = 'l'
+    else
+        return
+    endif
+
+    let oldw = tabpagenr()
+    silent exe 'TWcmd tmv ' . vim_cmd
+    let neww = tabpagenr()
+
+    if !exists('$TMUX')
+        return
+    endif
+    if oldw == neww
+        if a:direction == 'left'
+            call system("tmux swap-window -t -1")
+        else
+            call system("tmux swap-window -t +1")
+        endif
+    endif
 endfunction
 
 

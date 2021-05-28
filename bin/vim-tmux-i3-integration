@@ -151,7 +151,7 @@ focus() {
                 tmux select-pane -R
                 ;;
         esac
-    elif [[ $XDG_CURRENT_DESKTOP == 'i3' ]]; then
+    elif [[ ${XDG_CURRENT_DESKTOP-} == 'i3' ]]; then
         i3-msg -q focus $@
     fi
 }
@@ -159,7 +159,7 @@ focus() {
 move() {
     if [[ ! -z ${TMUX-} ]] && exists_another_pane_in_direction $@; then
         notify-send "tmux move $@"
-    elif [[ $XDG_CURRENT_DESKTOP == 'i3' ]]; then
+    elif [[ ${XDG_CURRENT_DESKTOP-} == 'i3' ]]; then
         i3-msg -q move $@
     fi
 }
@@ -214,7 +214,7 @@ resize() {
                 fi
                 ;;
         esac
-    elif [[ $XDG_CURRENT_DESKTOP == 'i3' ]]; then
+    elif [[ ${XDG_CURRENT_DESKTOP-} == 'i3' ]]; then
         i3-msg -q "resize $@ $size_delta"
     fi
 }

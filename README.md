@@ -1,4 +1,13 @@
 # Work In Progress...
+Works well in following conditions
+ - vim inside tmux
+   * Navigation between splits and tabs between vim/tmux
+   * Resize splits between vim/tmux
+ - vim with i3 window manager
+   * Navigation between splits and windows between vim/i3
+   * Resize splits and windows between vim/i3
+ - vim inside tmux and also under i3 window manager
+   * Has all the features above
 
 
 ## Features
